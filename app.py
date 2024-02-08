@@ -78,3 +78,107 @@ def homepage():
     # if g.user:
     #     following = [f.id for f in g.user.following] + [g.user.id]
     return render_template('home.html', form=form)
+
+
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    """Handle user signup.
+
+    Create new user and add to DB. Redirect to home page.
+
+    If form not valid, present form.
+
+    If there already is a user with that username: flash message
+    and re-present form.
+    """
+
+    form = UserAddForm()
+
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data,
+                password=form.password.data,
+                # email=form.email.data,
+                image_url=form.image_url.data or User.image_url.default.arg,
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+
+        do_login(user)
+
+        return redirect("/")
+
+    else:
+        return render_template('users/signup.html', form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('users/login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    """Handle logout of user."""
+
+    # IMPLEMENT THIS
+    do_logout()
+
+    flash("You have logged out!", "info")
+    return redirect("/login")
+
+
+##############################################################################
+# General user routes:
+
+@app.route('/users')
+def list_users():
+    """Page with listing of users.
+
+    Can take a 'q' param in querystring to search by that username.
+    """
+
+    search = request.args.get('q')
+
+    if not search:
+        users = User.query.all()
+    else:
+        users = User.query.filter(User.username.like(f"%{search}%")).all()
+
+    return render_template('users/index.html', users=users)
+
+
+@app.route('/users/<int:user_id>')
+def users_show(user_id):
+    """Show user profile."""
+
+    user = User.query.get_or_404(user_id)
+
+    # snagging messages in order from the database;
+    # user.messages won't be in order by default
+    gardens = (Garden
+                .query
+                .filter(Garden.user_id == user_id)
+                .order_by(Garden.created_at.desc())
+                .limit(100)
+                .all())
+    return render_template('users/show.html', user=user, gardens=gardens)

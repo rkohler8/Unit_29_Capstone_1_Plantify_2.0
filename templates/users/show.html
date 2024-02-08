@@ -1,0 +1,19 @@
+{% extends 'users/detail.html' %}
+
+{% block user_details %}
+
+  {# <div class="row" style="margin-top: 100px;"> #}
+    <h3>Recent Gardens:</h3>
+    <hr>
+    {% for garden in user.gardens %}
+      <div class="col-sm-6 card ">
+        <div class="card-body">
+          <div class="position-relative mb-3">
+            <img class="img-thumbnail" src="{{garden.image_url}}">
+            <a href="/{{ garden.user_id }}/gardens/{{ garden.id }}">{{ garden }}</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {# </div> #}
+{% endblock %}
