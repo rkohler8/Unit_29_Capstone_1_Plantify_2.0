@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>List of Plants</h1>
+<hr>
+  {% if plants|length == 0 %}
+    <h3>Sorry, no plants found</h3>
+  {% else %}
+    <div class="row justify-content-center">
+      <div class="col-sm-8">
+        <div class="row">
+
+          {% for plant in plants %}
+
+            <div class="col-lg-3 col-md-6 col-12">
+              <div class="card user-card">
+                <div class="card-inner">
+                  <div class="image-wrapper">
+                    <img src="/static/images/plant-default.jpg" alt="" class="card-hero">
+                  </div>
+                  <div class="card-contents">
+                    <a href="/users/{{ g.user.id }}" class="card-link">
+                      <img src="/static/images/plantify-logo.png" alt="Image for {{ g.user.username }}" class="card-image">
+                      <p>@{{ plant['name'] }}</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  {% endif %}
+<div class="pagination justify-content-center">
+  <a href="#">&laquo;</a>
+  <a href="#"> 1 </a>
+  <a class="active" href="#"> 2 </a>
+  <a href="#"> 3 </a>
+  <a href="#"> 4 </a>
+  <a href="#"> 5 </a>
+  <a href="#"> 6 </a>
+  <a href="#">&raquo;</a>
+</div>
+{% endblock %}

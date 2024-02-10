@@ -28,6 +28,9 @@
     </div>
     <ul class="nav navbar-nav navbar-right">
       {% if request.endpoint != None %}
+      <li><a href="/plants">Plants</a></li>
+      <li><a href="/gardens">Gardens</a></li>
+      <li><a href="/users">Users</a></li>
       <li>
         <form class="navbar-form navbar-right" action="/users">
           <input name="q" class="form-control" placeholder="Search Plantify" id="search">

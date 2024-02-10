@@ -44,7 +44,7 @@
     <div class="row" style="margin-top: 100px;">
       <h3>Recent Gardens:</h3>
       <hr>
-      {% for garden in g.user.gardens %}
+      {% for garden in g.user.gardens if garden.id <= 3 %}
         <div class="col card border-light">
           <div class="card-body">
             <div class="position-relative mb-3">

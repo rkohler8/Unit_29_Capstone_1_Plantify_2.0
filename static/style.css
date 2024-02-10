@@ -232,6 +232,74 @@ nav + .container {
 } */
 
 
+/* ================================ Cards */
+
+.user-card {
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  position: relative;
+  background: white;
+  margin-top: 20px;
+}
+
+.user-card > div {
+  position: absolute;
+  background: white;
+}
+
+.user-card form {
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.user-card form .btn {
+  min-width: 89px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.card-hero {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.card-image {
+  border: 3px solid #fff;
+  border-radius: 70px;
+  height: 70px;
+  width: 70px;
+  margin-top: -35px;
+  position: relative;
+  z-index: 1;
+}
+
+.card-link {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.card-link > p {
+  position: absolute;
+}
+
+.user-cards {
+  margin-bottom: 20px;
+}
+
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
 /* ================================ 404 page */
 
 .message-404 {
@@ -250,4 +318,27 @@ nav + .container {
 
 .message-404 .form-inline input {
   flex: 1;
+}
+
+
+/* Pagination links */
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+/* Style the active/current link */
+.pagination a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+/* Add a grey background color on mouse-over */
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination div{
+  background-color: #adabab;
 }
