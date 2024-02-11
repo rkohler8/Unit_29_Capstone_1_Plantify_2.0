@@ -2,36 +2,35 @@
 
 {% block content %}
 <div>
-  <form class="" action="/gardens">
-    <input name="q" class="form-control" placeholder="Search Gardens" id="search">
+  <form class="" action="/users">
+    <input name="q" class="form-control" placeholder="Search Users" id="search">
     <button class="btn btn-info">
       Search</span>
     </button>
   </form>
   
 </div>
-<h1>List of Gardens</h1>
+<h1>List of Users</h1>
 <hr>
-  {% if gardens|length == 0 %}
-    <h3>Sorry, no gardens found</h3>
+  {% if users|length == 0 %}
+    <h3>Sorry, no users found</h3>
   {% else %}
     <div class="row justify-content-center">
       <div class="col-sm-10">
         <div class="row">
 
-          {% for garden in gardens %}
+          {% for user in users %}
 
             <div class="col-lg-2 col-md-6 col-12">
               <div class="card user-card">
                 <div class="card-inner">
                   <div class="image-wrapper">
-                    <img src="/static/images/garden-default.jpg" alt="" class="card-hero">
+                    <img src="/static/images/plant-default.jpg" alt="" class="card-hero">
                   </div>
-                  <div class="card-body">
-                    {# <h5 class="card-title">Card title</h5> #}
-                    <a href="/gardens/{{ garden.id }}" class="card-link">
-                      {# <img src="/static/images/plantify-logo.png" alt="Image for {{ garden.name }}" class="card-image"> #}
-                      <p>@{{ garden.name }}</p>
+                  <div class="card-contents">
+                    <a href="/users/{{ user.id }}" class="card-link">
+                      <img src="{{ user.image_url }}" alt="Image for {{ user.username }}" class="card-image">
+                      <p>@{{ user.username }}</p>
                     </a>
                   </div>
                 </div>

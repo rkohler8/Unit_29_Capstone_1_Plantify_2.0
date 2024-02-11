@@ -166,20 +166,20 @@ def list_users():
 
 
 @app.route('/users/<int:user_id>')
-def users_show(user_id):
+def user_show(user_id):
    """Show user profile."""
 
    user = User.query.get_or_404(user_id)
 
    # snagging messages in order from the database;
    # user.messages won't be in order by default
-   gardens = (Garden
+   users = (User
                .query
-               .filter(Garden.user_id == user_id)
-               .order_by(Garden.created_at.desc())
+               .filter(User.id == user_id)
+               # .order_by(User.created_at.desc())
                .limit(100)
                .all())
-   return render_template('users/show.html', user=user, gardens=gardens)
+   return render_template('users/show.html', user=user)
 
 
 ##############################################################################
@@ -221,7 +221,7 @@ def list_plants():
 
 
 @app.route('/plants/<int:plant_id>')
-def plants_show(plant_id):
+def plant_show(plant_id):
    """Show plant profile."""
 
    # plant = User.query.get_or_404(plant_id)
@@ -251,7 +251,38 @@ def plants_show(plant_id):
 ##############################################################################
 # Garden routes:
 
+@app.route('/gardens')
+def list_gardens():
+   """Page with listing of gardens.
 
+   Can take a 'q' param in querystring to search by that gardenname.
+   """
+
+   search = request.args.get('q')
+
+   if not search:
+      gardens = Garden.query.all()
+   else:
+      gardens = Garden.query.filter(Garden.name.like(f"%{search}%")).all()
+
+   return render_template('gardens/index.html', gardens=gardens)
+
+
+@app.route('/gardens/<int:garden_id>')
+def garden_show(garden_id):
+   """Show garden profile."""
+
+   garden = Garden.query.get_or_404(garden_id)
+
+   # snagging messages in order from the database;
+   # user.messages won't be in order by default
+   # gardens = (Garden
+   #             .query
+   #             .filter(Garden.user_id == user_id)
+   #             .order_by(Garden.created_at.desc())
+   #             .limit(100)
+   #             .all())
+   return render_template('gardens/show.html', garden=garden)
 
 # conversion=round(requests.get(f"{BASE_URL}/convert",
    #                           params={"access_key": API_SECRET_KEY,
