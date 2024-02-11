@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+  <form class="" action="/plants">
+    <input name="q" class="form-control" placeholder="Search Plants" id="search">
+    <button class="btn btn-info">
+      Search</span>
+    </button>
+  </form>
+  
+</div>
+<h1>{{ plant.name }}</h1>
+<hr>
+
+
+{% endblock %}

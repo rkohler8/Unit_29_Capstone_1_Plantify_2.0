@@ -206,29 +206,43 @@ def list_plants():
       resp = requests.get(f"{BASE_URL}/plants",
                            headers=API_HEADERS
                            ).json()
+   else:
+      resp = requests.post(f"{BASE_URL}/search",
+                           headers=API_HEADERS,
+                           params={"q": search}
+                           ).json()
    
    plants = resp['plants']
    # flash(API_HEADERS)
+   # flash(plants)
    flash(plants[-1]['id'])
 
    return render_template('plants/index.html', plants=plants)
 
 
-@app.route('/users/<int:user_id>')
-def plants_show(user_id):
+@app.route('/plants/<int:plant_id>')
+def plants_show(plant_id):
    """Show plant profile."""
 
-   plant = User.query.get_or_404(user_id)
+   # plant = User.query.get_or_404(plant_id)
 
-   # snagging messages in order from the database;
-   # plant.messages won't be in order by default
-   gardens = (Garden
-               .query
-               .filter(Garden.user_id == user_id)
-               .order_by(Garden.created_at.desc())
-               .limit(100)
-               .all())
-   return render_template('plants/show.html', plant=plant, gardens=gardens)
+   # # snagging messages in order from the database;
+   # # plant.messages won't be in order by default
+   # gardens = (Garden
+   #             .query
+   #             .filter(Garden.plant_id == plant_id)
+   #             .order_by(Garden.created_at.desc())
+   #             .limit(100)
+   #             .all())
+
+   resp = requests.get(f"{BASE_URL}/plants/{plant_id}",
+                           headers=API_HEADERS
+                           )
+   
+   plant=resp.json()
+   
+
+   return render_template('plants/show.html', plant=plant)
 
 
 

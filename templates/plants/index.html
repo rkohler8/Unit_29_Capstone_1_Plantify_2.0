@@ -1,27 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div>
+  <form class="" action="/plants">
+    <input name="q" class="form-control" placeholder="Search Plants" id="search">
+    <button class="btn btn-info">
+      Search</span>
+    </button>
+  </form>
+  
+</div>
 <h1>List of Plants</h1>
 <hr>
   {% if plants|length == 0 %}
     <h3>Sorry, no plants found</h3>
   {% else %}
     <div class="row justify-content-center">
-      <div class="col-sm-8">
+      <div class="col-sm-10">
         <div class="row">
 
           {% for plant in plants %}
 
-            <div class="col-lg-3 col-md-6 col-12">
+            <div class="col-lg-2 col-md-6 col-12">
               <div class="card user-card">
                 <div class="card-inner">
                   <div class="image-wrapper">
                     <img src="/static/images/plant-default.jpg" alt="" class="card-hero">
                   </div>
                   <div class="card-contents">
-                    <a href="/users/{{ g.user.id }}" class="card-link">
-                      <img src="/static/images/plantify-logo.png" alt="Image for {{ g.user.username }}" class="card-image">
-                      <p>@{{ plant['name'] }}</p>
+                    <a href="/plants/{{ plant.id }}" class="card-link">
+                      <img src="/static/images/plantify-logo.png" alt="Image for {{ plant.name }}" class="card-image">
+                      <p>@{{ plant.name }}</p>
                     </a>
                   </div>
                 </div>

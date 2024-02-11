@@ -339,6 +339,8 @@ nav + .container {
 /* Add a grey background color on mouse-over */
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
-.pagination div{
+.pagination {
+  margin-top: 100px;
+  margin-bottom: 10px;
   background-color: #adabab;
 }
