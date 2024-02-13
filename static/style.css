@@ -2,7 +2,7 @@
 
 body {
   /* background-color: #e6ecf0; */
-  background-color: rgb(63, 105, 63);
+  background-color: rgb(35, 59, 35);
 
   /* background-image: url("/static/images/herbs.jpg");
   background-size: cover;
@@ -189,14 +189,14 @@ nav + .container {
 } */
 
 .row.full-width {
-  background-color: #867272;
+  background-color: #8a7667;
   /* margin-top: 80px; */
   /* margin-bottom: 1rem; */
   /* border-bottom: 1px solid #ccc; */
   /* border-top: 1px solid #ccc; */
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
   /* height: 60px; */
-  align-items: center;
+  /* align-items: center; */
 }
 
 .user-stats > .ml-auto {
@@ -217,19 +217,19 @@ nav + .container {
   line-height: 1;
 }
 
-/* .stat > .small {
-  color: #657786;
+.stat > .small {
+  /* color: #657786; */
   font-weight: bold;
   font-size: 12px;
   letter-spacing: 0.02em;
   margin-bottom: 0;
-} */
+}
 
-/* .stat > .small + h4 {
+.stat > .small + h4 {
   font-size: 18px;
   font-weight: bold;
   padding-top: 3px;
-} */
+}
 
 
 /* ================================ Cards */
@@ -289,7 +289,7 @@ nav + .container {
 }
 
 .user-cards {
-  margin-bottom: 20px;
+  margin-top: 7px;
 }
 
 .card-inner {
@@ -320,6 +320,8 @@ nav + .container {
   flex: 1;
 }
 
+
+/* ================================ Pagination */
 
 /* Pagination links */
 .pagination a {

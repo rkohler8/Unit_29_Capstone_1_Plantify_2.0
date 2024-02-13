@@ -10,8 +10,41 @@
   </form>
   
 </div>
-<h1>{{ garden.name }}</h1>
-<hr>
+<div class="row full-width" style="margin-top: 20px;">
+  <div class="col-9">
+    <ul class="user-stats nav nav-pills">
+    <li>
+    <h1>{{ garden.name }}</h1>
+    </li>
+      <li class="stat">
+        <p class="small">Plants</p>
+        <h4>
+          <a href="/users/{{ garden.user_id }}">{{ plants | length }}</a>
+        </h4>
+      </li>
+      <li class="stat">
+        <p class="small">Created By</p>
+        <h4><a href="/users/{{ garden.user_id }}">{{  garden.user_id }}</a></h4>
+      </li>
+    </ul>
 
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+    <ul>
+      {% for plant in plants %}
+      <li>
+        <h4>
+          <img class="card-image user-cards" src="/static/images/plant-default.jpg">
+          <a href="/plants/{{ plant.id }}">{{ plant.name }}</a>
+        </h4>
+      </li>
+
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 
 {% endblock %}

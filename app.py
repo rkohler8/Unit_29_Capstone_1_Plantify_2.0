@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from sqlalchemy.exc import IntegrityError
 
-from forms import UserAddForm, LoginForm, UserEditForm, SearchForm
+from forms import UserAddForm, LoginForm, UserEditForm, SearchForm, GardenAddForm
 from models import db, connect_db, User, Garden, Plant, GardenPlant
 
 CURR_USER_KEY = "curr_user"
@@ -282,7 +282,47 @@ def garden_show(garden_id):
    #             .order_by(Garden.created_at.desc())
    #             .limit(100)
    #             .all())
-   return render_template('gardens/show.html', garden=garden)
+   plants=[]
+   for plant in garden.plants:
+      resp = requests.get(f"{BASE_URL}/plants/{plant.api_id}",
+                           headers=API_HEADERS
+                           )
+      json = resp.json()
+      plants.append(json)
+
+   return render_template('gardens/show.html', garden=garden, plants=plants)
+
+
+@app.route('/gardens/<int:garden_id>/edit')
+def garden_edit(garden_id):
+   """Edit Garden Information"""
+
+   if not g.user:
+      flash("Access unauthorized.", "danger")
+      return redirect("/")
+
+   garden = Garden.query.get_or_404(garden_id)
+
+   if g.user.id != garden.user_id:
+      flash("You do not have permission to do that", 'danger')
+      return redirect('/gardens/<int:garden_id>')
+
+   form = GardenAddForm()
+
+   if form.validate_on_submit():
+      user = User.authenticate(form.username.data,
+                              form.password.data)
+
+      if user:
+         do_login(user)
+         flash(f"Hello, {user.username}!", "success")
+         return redirect("/")
+
+      flash("Invalid credentials.", 'danger')
+
+   return render_template('users/login.html', form=form)
+
+
 
 # conversion=round(requests.get(f"{BASE_URL}/convert",
    #                           params={"access_key": API_SECRET_KEY,
