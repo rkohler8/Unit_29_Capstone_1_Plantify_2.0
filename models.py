@@ -224,8 +224,9 @@ class Garden(db.Model):
         nullable=False,
     )
 
-    # user = db.relationship('User')
+    user = db.relationship('User')
     plants = db.relationship('Plant', secondary='gardens_plants', backref='gardens')
+    # gardens = db.relationship('Garden')
 
 
 class GardenPlant(db.Model):

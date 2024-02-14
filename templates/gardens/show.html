@@ -10,11 +10,17 @@
   </form>
   
 </div>
+<div style="background: rgba(255, 255, 255, 0.3);">
 <div class="row full-width" style="margin-top: 20px;">
   <div class="col-9">
     <ul class="user-stats nav nav-pills">
     <li>
     <h1>{{ garden.name }}</h1>
+    {% if g.user.id == garden.user.id %}
+      <li>
+      <a href="/gardens/{{ garden.id }}/edit"><i class="far fa-edit"></i></a>
+      </li>
+    {% endif %}
     </li>
       <li class="stat">
         <p class="small">Plants</p>
@@ -24,8 +30,25 @@
       </li>
       <li class="stat">
         <p class="small">Created By</p>
-        <h4><a href="/users/{{ garden.user_id }}">{{  garden.user_id }}</a></h4>
+        <h4><a href="/users/{{ garden.user.id }}">{{  garden.user.username }}</a></h4>
       </li>
+      <li>
+    {# <div class="justify-content-end"> #}
+      {% if g.user.id == garden.user.id %}
+      {# <li>
+      <a href="/gardens/{{ garden.id }}/edit" class="btn btn-success"><i class="fa fa-pencil-square" aria-hidden="true"></i></a>
+      </li> #}
+      <li class="stat">
+      <a href="/plants" class="btn btn-success">Add Plant</a>
+      </li>
+      <li class="stat">
+        <form method="POST" action="/gardens/delete" class="form-inline">
+          <button class="btn btn-danger ml-2">Delete Garden</button>
+        </form>
+      </li>
+      {% endif %}
+    {# </div> #}
+    </li>
     </ul>
 
   </div>
@@ -45,6 +68,7 @@
       {% endfor %}
     </ul>
   </div>
+</div>
 </div>
 
 {% endblock %}

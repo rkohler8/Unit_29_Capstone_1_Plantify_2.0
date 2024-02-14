@@ -10,8 +10,42 @@
   </form>
   
 </div>
-<h1>{{ plant.name }}</h1>
-<hr>
+<div class="container" style="background: rgba(255, 255, 255, 0.3);">
+  <div class="row">
+    <div class="col-1.5">
+      <h1>{{ plant.name }}</h1>
+      <em>{{ plant.scientific_name }}</em>
+    </div>
+    {% if g.user.id %}
+      <div class="col">
+        <a href="/gardens" class="btn btn-success">Add to Garden</a>
+      </div>
+    {% endif %}
+  </div>
+  <hr>
+  <aside>
+    <div class="text-center">
+      <img alt="" src="https://cdn.permapeople.org/lzavru3dgn25eabb03w4p8c3orgp">
+    </div>
+  </aside>
+  <div>
+    <section>
+      <span>
+        <p>{{ plant.description }}</p>
+      </span>
+    </section>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table>
+        <tbody>
+          <tr>
+            <th> Growth Conditions</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-
+</div>
 {% endblock %}

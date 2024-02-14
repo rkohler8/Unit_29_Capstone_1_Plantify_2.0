@@ -273,6 +273,7 @@ def garden_show(garden_id):
    """Show garden profile."""
 
    garden = Garden.query.get_or_404(garden_id)
+   # user = User.query.get_or_404(garden.user_id)
 
    # snagging messages in order from the database;
    # user.messages won't be in order by default
@@ -314,13 +315,22 @@ def garden_edit(garden_id):
                               form.password.data)
 
       if user:
-         do_login(user)
-         flash(f"Hello, {user.username}!", "success")
-         return redirect("/")
+         try:
+            garden.name = form.name.data
+            db.session.commit()
+            flash(f"Garden renamed to {garden.name}", "success")
+            return redirect("/gardens/<int:garden_id>")
+         
+         except IntegrityError:
+            flash("Garden name already taken", 'warning')
+            return render_template('users/update.html', form=form)
 
       flash("Invalid credentials.", 'danger')
 
    return render_template('users/login.html', form=form)
+
+
+###### TODO: Delete Garden
 
 
 
