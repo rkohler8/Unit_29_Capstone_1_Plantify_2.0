@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length
 
 
@@ -7,6 +7,12 @@ class GardenAddForm(FlaskForm):
     """Form for adding/editing Gardens."""
 
     name = TextAreaField('Enter Garden Name', validators=[DataRequired()])
+
+
+class PlantToGardenForm(FlaskForm):
+    """Form for adding/editing Gardens."""
+
+    gardens = SelectField('Select Garden', validators=[DataRequired()])
 
 
 class UserAddForm(FlaskForm):

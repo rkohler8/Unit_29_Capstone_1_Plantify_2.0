@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
+{# <div>
   <form class="" action="/plants">
     <input name="q" class="form-control" placeholder="Search Plants" id="search">
     <button class="btn btn-info">
@@ -9,16 +9,42 @@
     </button>
   </form>
   
-</div>
+</div> #}
 <div class="container" style="background: rgba(255, 255, 255, 0.3);">
   <div class="row">
     <div class="col-1.5">
       <h1>{{ plant.name }}</h1>
       <em>{{ plant.scientific_name }}</em>
+      <a href="{{ plant_data['Wikipedia'] }}"><small>Wiki</small></a>
     </div>
-    {% if g.user.id %}
+    {% if g.user %}
       <div class="col">
-        <a href="/gardens" class="btn btn-success">Add to Garden</a>
+        {# <small> #}
+        <select name="garden_list" id="garden_list">
+        <optgroup>
+        <option value="">Gardens</option>
+          {% for garden in g.user.gardens %}
+            <option value="{{ garden.name }}">{{ garden.name }}</option>
+          {% endfor %}
+          </optgroup>
+        </select>
+        {# </small> #}
+        {# <form method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form
+            if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <button type="submit">Submit</button>
+      </form> #}
+        <a href="/gardens" class="btn btn-success">Add</a>
       </div>
     {% endif %}
   </div>
@@ -39,6 +65,41 @@
     <div class="col">
       <table>
         <tbody>
+          <tr>
+            <th> Growth Conditions</th>
+          </tr>
+          {% for key in plant_data.keys() %}
+          <tr>
+            <th>
+              {{ key }}
+            </th>
+            <td>
+              {{ plant_data[key] }}
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th> Growth Conditions</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <table>
+        <tbody>
+          <tr>
+            <th> Growth Conditions</th>
+          </tr>
+          {% for key in plant_data.keys() %}
+          <tr>
+            <th>
+              {{ key }}
+            </th>
+            <td>
+              {{ plant_data[key] }}
+            </td>
+          </tr>
+          {% endfor %}
           <tr>
             <th> Growth Conditions</th>
           </tr>

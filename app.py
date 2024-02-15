@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from sqlalchemy.exc import IntegrityError
 
-from forms import UserAddForm, LoginForm, UserEditForm, SearchForm, GardenAddForm
+from forms import UserAddForm, LoginForm, UserEditForm, SearchForm, GardenAddForm, PlantToGardenForm
 from models import db, connect_db, User, Garden, Plant, GardenPlant
 
 CURR_USER_KEY = "curr_user"
@@ -220,30 +220,44 @@ def list_plants():
    return render_template('plants/index.html', plants=plants)
 
 
-@app.route('/plants/<int:plant_id>')
+@app.route('/plants/<int:plant_id>', methods=["GET", "POST"])
 def plant_show(plant_id):
    """Show plant profile."""
 
-   # plant = User.query.get_or_404(plant_id)
-
-   # # snagging messages in order from the database;
-   # # plant.messages won't be in order by default
-   # gardens = (Garden
-   #             .query
-   #             .filter(Garden.plant_id == plant_id)
-   #             .order_by(Garden.created_at.desc())
-   #             .limit(100)
-   #             .all())
+   # if g.user:
+   #    form = PlantToGardenForm()
+   #    gardens = [(g.id, g.name) for g in Garden.query.all()]
+   #    form.gardens.choices = gardens
 
    resp = requests.get(f"{BASE_URL}/plants/{plant_id}",
                            headers=API_HEADERS
                            )
    
    plant=resp.json()
+
+   plant_data={}
+
+   for info in plant['data']:
+      plant_data[f"{info['key']}"]=(f"{info.get('value')}")
+
+   flash(f"{plant_data['Wikipedia']}", 'info')
+   # flash(f"{plant['data'][3]['key']}", 'info')
    
+   # if g.user:
+   #    return render_template('plants/show.html', plant=plant, plant_data=plant_data, form=form)
 
-   return render_template('plants/show.html', plant=plant)
+   # if request.method == 'POST':
 
+   
+   return render_template('plants/show.html', plant=plant, plant_data=plant_data)
+
+
+@app.route('/plants/<int:plant_id>/add', methods=["POST"])
+def add_plant_to_garden(plant_id):
+
+
+
+   return redirect('/plants/<int:plant_id>')
 
 
 
