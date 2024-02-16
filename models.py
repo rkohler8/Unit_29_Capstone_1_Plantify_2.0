@@ -247,8 +247,12 @@ class GardenPlant(db.Model):
    
    plant_id = db.Column(
        db.Integer, 
-       db.ForeignKey('plants.id'),
+       db.ForeignKey('plants.api_id'),
        )
+#    plant_api_id = db.Column(
+#         db.Integer,
+#         primary_key=True,
+#     )
 
 
 def connect_db(app):

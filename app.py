@@ -224,10 +224,12 @@ def list_plants():
 def plant_show(plant_id):
    """Show plant profile."""
 
-   # if g.user:
-   #    form = PlantToGardenForm()
-   #    gardens = [(g.id, g.name) for g in Garden.query.all()]
-   #    form.gardens.choices = gardens
+   if g.user:
+      form = PlantToGardenForm()
+      gardens = [(g.id, g.name) for g in Garden.query.all()]
+      # flash(f"{gardens}")
+      form.gardens.choices = gardens
+
 
    resp = requests.get(f"{BASE_URL}/plants/{plant_id}",
                            headers=API_HEADERS
@@ -240,19 +242,52 @@ def plant_show(plant_id):
    for info in plant['data']:
       plant_data[f"{info['key']}"]=(f"{info.get('value')}")
 
-   flash(f"{plant_data['Wikipedia']}", 'info')
+
+   if form.validate_on_submit():
+      gar = form.gardens.data
+      # flash(f'{gar}')
+      garden = Garden.query.get_or_404(gar)
+      for p in garden.plants:
+         if p.id == plant_id:
+            flash(f"Plant already in garden '{garden.name}'", 'warning')
+            return render_template('plants/show.html', plant=plant, plant_data=plant_data, form=form)
+
+      # if plant_id not in garden.plants.id:
+      temp_plant = Plant.query.filter_by(api_id=plant['id']).all()
+      if len(temp_plant) == 0:
+         new_plant = Plant(id=plant_id,
+                           name=plant['name'],
+                           api_id=plant['id'])
+         db.session.add(new_plant)
+         db.session.commit()
+         new_link = GardenPlant(garden_id=garden.id,
+                              plant_id=plant_id)
+         db.session.add(new_link)
+         db.session.commit()
+         flash(f"new Plant '{plant['name']}' added to garden '{garden.name}'", 'info')
+         return redirect(f'/plants/{plant_id}')
+      else: 
+         new_link = GardenPlant(garden_id=garden.id,
+                              plant_id=plant_id)
+         db.session.add(new_link)
+         db.session.commit()
+         flash(f"Plant '{plant['name']}' already localized, added to garden '{garden.name}'", 'info')
+         return redirect(f'/plants/{plant_id}')
+
+
+   # else:
+   #    flash(f"fail", 'warning')
+
+   # flash(f"{plant_data['Wikipedia']}", 'info')
    # flash(f"{plant['data'][3]['key']}", 'info')
    
-   # if g.user:
-   #    return render_template('plants/show.html', plant=plant, plant_data=plant_data, form=form)
+   if g.user:
+      return render_template('plants/show.html', plant=plant, plant_data=plant_data, form=form)
 
-   # if request.method == 'POST':
-
-   
    return render_template('plants/show.html', plant=plant, plant_data=plant_data)
 
 
-@app.route('/plants/<int:plant_id>/add', methods=["POST"])
+@app.route('/plants/<int:plant_id>/add/<int:garden_id>', methods=["POST"])
 def add_plant_to_garden(plant_id):
 
 

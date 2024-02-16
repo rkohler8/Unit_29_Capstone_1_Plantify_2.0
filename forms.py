@@ -12,7 +12,7 @@ class GardenAddForm(FlaskForm):
 class PlantToGardenForm(FlaskForm):
     """Form for adding/editing Gardens."""
 
-    gardens = SelectField('Select Garden', validators=[DataRequired()])
+    gardens = SelectField('', validate_choice=False)
 
 
 class UserAddForm(FlaskForm):

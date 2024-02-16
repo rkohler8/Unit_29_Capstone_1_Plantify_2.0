@@ -20,21 +20,21 @@
     {% if g.user %}
       <div class="col">
         {# <small> #}
-        <select name="garden_list" id="garden_list">
+        {# <select name="garden_list" id="garden_list">
         <optgroup>
         <option value="">Gardens</option>
           {% for garden in g.user.gardens %}
             <option value="{{ garden.name }}">{{ garden.name }}</option>
           {% endfor %}
           </optgroup>
-        </select>
+        </select> #}
         {# </small> #}
-        {# <form method="POST">
+        <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form
             if field.widget.input_type != 'hidden' %}
         <p>
-            {{ field.label }}
+            {# {{ field.label }} #}
             {{ field }}
 
             {% for error in field.errors %}
@@ -42,9 +42,9 @@
             {% endfor %}
         </p>
         {% endfor %}
-        <button type="submit">Submit</button>
-      </form> #}
-        <a href="/gardens" class="btn btn-success">Add</a>
+        <button type="submit" class="btn btn-success">Add</button>
+      </form>
+        {# <a href="/gardens" class="btn btn-success">Add</a> #}
       </div>
     {% endif %}
   </div>
@@ -63,12 +63,15 @@
   </div>
   <div class="row">
     <div class="col">
-      <table>
-        <tbody>
-          <tr>
-            <th> Growth Conditions</th>
-          </tr>
-          {% for key in plant_data.keys() %}
+      <table class="table table-success table-striped table-bordered">
+          <thead class="table-dark">
+            <th colspan="2"> Growth Conditions</th>
+          </thead>
+        <tbody class="table-group-divider">
+          {% for key in plant_data.keys() if key == "USDA Hardiness zone" or key == "Light requirement" 
+                                or key == "Water requirement" or key == "Soil type" or key == "Soil pH" 
+                                or key == "Growth" or key == "Seed viability" or key == "Drought resistant" 
+                                or key == "Root type" or key == "Warning" or key == "Leaves" %} 
           <tr>
             <th>
               {{ key }}
@@ -78,19 +81,39 @@
             </td>
           </tr>
           {% endfor %}
+        </tbody>
+      </table>
+      <table class="table table-success table-striped table-bordered">
+          <thead class="table-dark">
+            <th colspan="2">Uses</th>
+          </thead>
+        <tbody class="table-group-divider">
+          {% for key in plant_data.keys() if key == "Edible" or key == "Edible parts" or key == "Edible uses" 
+                                      or key == "Propagation - Transplanting" or key == "Propagation - Direct sowing" 
+                                      or key == "Layer" or key == "Utility" %}
           <tr>
-            <th> Growth Conditions</th>
+            <th>
+              {{ key }}
+            </th>
+            <td>
+              {{ plant_data[key] }}
+            </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
     <div class="col">
-      <table>
-        <tbody>
-          <tr>
-            <th> Growth Conditions</th>
-          </tr>
-          {% for key in plant_data.keys() %}
+      <table class="table table-success table-striped table-bordered">
+          <thead class="table-dark">
+            <th colspan="2"> Cultivation details</th>
+          </thead>
+        <tbody class="table-group-divider">
+          {% for key in plant_data.keys() if key == "Life cycle" or key == "Growth" or key == "Germination temperature" 
+                                      or key == "Propagation - Transplanting" or key == "Propagation - Direct sowing" or key == "Spacing"
+                                      or key == "Days to maturity" or key == "When to sow (indoors)" or key == "When to sow (outdoors)"
+                                      or key == "When to plant (transplant)" or key == "Seed planting depth" or key == "Germination time" 
+                                      or key == "When to plant (cuttings)" or key == "Propagation method" or key == "Germination time" %}
           <tr>
             <th>
               {{ key }}
@@ -100,9 +123,6 @@
             </td>
           </tr>
           {% endfor %}
-          <tr>
-            <th> Growth Conditions</th>
-          </tr>
         </tbody>
       </table>
     </div>
