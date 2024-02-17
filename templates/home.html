@@ -22,7 +22,7 @@
         </form>
       </div>
       <div class="col-md-1">
-        <button class="btn btn-success">Search</button>
+        <button class="btn btn-success" style="margin-left: 5px;">Search</button>
       </div>
     </div>
   </div>
@@ -32,9 +32,28 @@
   </div>
 
 {% else %}
+<div class="row"> 
+    <div class="input-group mb-2 justify-content-end" style="margin-top: 125px;">
+      <div class="col-md-10">
+        <form method="POST" id="search-form">
+          {{ form.hidden_tag() }}
+        
+          {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+          {% endfor %}
+        </form>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-success" style="margin-left: 5px;">Search</button>
+      </div>
+    </div>
+  </div>
   <div class="">
     {# <div class="col-md-7 col-lg-5"> #}
-    <div class="row justify-content-md-center" >
+    <div class="row justify-content-md-center" style="margin-top: -30px;">
       <div class="col-md-7 col-lg-5" style="margin-top: 100px;">
         <h4>New to Plantify?</h4>
         <p>Sign up now to create your own garden!</p>
@@ -53,8 +72,8 @@
   {% for garden in g.user.gardens %}
   <div class="col card border-light">
     <div class="card-body">
-      <div class="position-relative mb-3">
-        <img class="img-thumbnail" src="{{garden.image_url}}">
+      <div class="position-relative">
+        <img class="img-thumbnail" src="{{ garden.image_url }}">
         <a href="/gardens/{{ garden.id }}">{{ garden.name }}</a>
         <small><span class="text-muted">{{ garden.created_at.strftime('%d %B %Y') }}</span></small>
       </div>

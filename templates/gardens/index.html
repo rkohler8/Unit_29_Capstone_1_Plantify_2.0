@@ -28,12 +28,20 @@
                   <div>
                     <img src="/static/images/garden-default.jpg" class="rounded image-wrapper">
                   </div>
-                  <div class="">
+                  <div class="row row-cols-md-3">
                     {# <h5 class="card-title">Card title</h5> #}
-                    <a href="/gardens/{{ garden.id }}" class="" style="margin-left: 100;">
-                      <img src="{{ garden.user.image_url }}" alt="Image for {{ garden.name }}" class="card-image">
-                      <p>{{ garden.name }}</p>
-                    </a>
+                    <div class="col" >
+                      <a href="/gardens/{{ garden.id }}" class="">
+                        <img src="{{ garden.user.image_url }}" alt="Image for {{ garden.name }}" class="card-image">
+                        <p style="margin-left: 10px;">{{ garden.name }}</p>
+                      </a>
+                    </div>
+                    <div class="col" style="margin-top: 35px; margin-right: 25px;">
+                      <a href="/gardens/{{ garden.id }}" class="">
+                        {# <span class="text-muted">{{ garden.user }}</span> #}
+                        <p>{{ garden.user.username }}</p>
+                      </a>
+                    </div>
                   </div>
                 {# </div> #}
               </div>
