@@ -134,9 +134,9 @@ nav + .container {
 } */
 
 
-.card {
+/* .card {
   width: 22.5rem;
-}
+} */
 
 /* ========================== Signup/Login */
 
@@ -296,6 +296,10 @@ nav + .container {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.image-wrapper {
+  max-width: 304px;
 }
 
 

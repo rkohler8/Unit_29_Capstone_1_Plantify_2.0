@@ -7,81 +7,69 @@
   </div>
 </div>
 {% if g.user %}
-  {# <div class="row"> #} 
-  <div class="input-group mb-2 justify-content-end" style="margin-top: 150px;">
-  <div class="col-md-11">
-    <form method="POST" id="search-form">
-      {{ form.hidden_tag() }}
-    
-      {% for field in form if field.widget.input_type != 'hidden' %}
-        {% for error in field.errors %}
-          <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-        {{ field(placeholder=field.label.text, class="form-control") }}
-      {% endfor %}
-    </form>
+  <div class="row"> 
+    <div class="input-group mb-2 justify-content-end" style="margin-top: 150px;">
+      <div class="col-md-11">
+        <form method="POST" id="search-form">
+          {{ form.hidden_tag() }}
+        
+          {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+          {% endfor %}
+        </form>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-success">Search</button>
+      </div>
+    </div>
   </div>
-  <div class="col-md-1">
-    <button class="btn btn-success">Search</button>
+  <div class="row justify-content-md-left">
+      <h3>Recent Gardens:</h3>
+      <hr>
   </div>
-  {# </div> #}
 
-    {% else %}
-    <div class="home-hero">
-      {# <div class="col-md-7 col-lg-5"> #}
+{% else %}
+  <div class="">
+    {# <div class="col-md-7 col-lg-5"> #}
     <div class="row justify-content-md-center" >
       <div class="col-md-7 col-lg-5" style="margin-top: 100px;">
         <h4>New to Plantify?</h4>
-        <p>Sign up now to get your own personalized garden!</p>
+        <p>Sign up now to create your own garden!</p>
         <a href="/signup" class="btn btn-success">Sign up</a>
       </div>
+    </div>
+  {# </div> #}
+  </div>
+{% endif %}
+
+{# <div class="row justify-content-md-left">
+  <h3>Recent Gardens:</h3>
+  <hr>
+</div> #}
+<div class="row" style="margin-top: 90px;">
+  {% for garden in g.user.gardens %}
+  <div class="col card border-light">
+    <div class="card-body">
+      <div class="position-relative mb-3">
+        <img class="img-thumbnail" src="{{garden.image_url}}">
+        <a href="/gardens/{{ garden.id }}">{{ garden.name }}</a>
+        <small><span class="text-muted">{{ garden.created_at.strftime('%d %B %Y') }}</span></small>
       </div>
     </div>
-    {% endif %}
-
-
-    <div class="row" style="margin-top: 90px;">
-      <h3>Recent Gardens:</h3>
-      <hr>
-      {% for garden in g.user.gardens if garden.id <= 3 %}
-        <div class="col card border-light">
-          <div class="card-body">
-            <div class="position-relative mb-3">
-              <img class="img-thumbnail" src="{{garden.image_url}}">
-              <a href="/{{ garden.user_id }}/gardens/{{ garden.id }}">{{ garden }}</a>
-              {# <p>Available? <b>{{ pet.available }}</b></p> #}
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-    
-    {# <div class="col-lg-6 col-md-8 col-sm-12">
-      <ul class="list-group" id="messages">
-        {% for msg in messages %}
-          <li class="list-group-item">
-            <a href="/messages/{{ msg.id  }}" class="message-link"/>
-            <a href="/users/{{ msg.user.id }}">
-              <img src="{{ msg.user.image_url }}" alt="" class="timeline-image">
-            </a>
-            <div class="message-area">
-              <a href="/users/{{ msg.user.id }}">@{{ msg.user.username }}</a>
-              <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
-              <p>{{ msg.text }}</p>
-            </div>
-            <form method="POST" action="/messages/{{ msg.id }}/like" id="messages-form">
-              <button class="
-                btn 
-                btn-sm 
-                {{'btn-primary' if msg in g.user.likes else 'btn-secondary'}}"
-              >
-                <i class="fa fa-thumbs-up"></i> 
-              </button>
-            </form>
-          </li>
-        {% endfor %}
-      </ul>
-    </div> #}
-
   </div>
+  {# {% if loop.length <= 3 and loop.index %}
+  <div class="col">
+  </div>
+
+  {% endif %} #}
+  {% endfor %}
+  {# {% if len(g.user.gardens) == 1 %}
+
+  {% endif %} #}
+</div>
+
+{# </div> #}
 {% endblock %}

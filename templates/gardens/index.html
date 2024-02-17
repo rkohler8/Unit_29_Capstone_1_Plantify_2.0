@@ -12,42 +12,60 @@
 </div>
 <h1>List of Gardens</h1>
 <hr>
-  {% if gardens|length == 0 %}
+  {% if gardens | length == 0 %}
     <h3>Sorry, no gardens found</h3>
   {% else %}
-    <div class="row justify-content-center">
-      <div class="col-sm-10">
-        <div class="row">
+    {# <div class="row justify-content-center"> #}
+      {# <div class="col-sm-10"> #}
+        {# <div class="row"> #}
 
+          <div class="row row-cols-3 row-cols-md-4 g-4">
           {% for garden in gardens %}
 
-            <div class="col-lg-2 col-md-6 col-12">
+            <div class="col">
+              <div class="card mb-3" >
+                {# <div class="card-inner"> #}
+                  <div>
+                    <img src="/static/images/garden-default.jpg" class="rounded image-wrapper">
+                  </div>
+                  <div class="">
+                    {# <h5 class="card-title">Card title</h5> #}
+                    <a href="/gardens/{{ garden.id }}" class="" style="margin-left: 100;">
+                      <img src="{{ garden.user.image_url }}" alt="Image for {{ garden.name }}" class="card-image">
+                      <p>{{ garden.name }}</p>
+                    </a>
+                  </div>
+                {# </div> #}
+              </div>
+            </div>
+
+            {# <div class="col-lg-2 col-md-6 col-12">
               <div class="card user-card">
                 <div class="card-inner">
                   <div class="image-wrapper">
                     <img src="/static/images/garden-default.jpg" alt="" class="card-hero">
                   </div>
                   <div class="card-body">
-                    {# <h5 class="card-title">Card title</h5> #}
+                    <h5 class="card-title">Card title</h5>
                     <a href="/gardens/{{ garden.id }}" class="card-link">
-                      {# <img src="/static/images/plantify-logo.png" alt="Image for {{ garden.name }}" class="card-image"> #}
+                      <img src="/static/images/plantify-logo.png" alt="Image for {{ garden.name }}" class="card-image">
                       <p>@{{ garden.name }}</p>
                     </a>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> #}
 
           {% endfor %}
 
         </div>
-      </div>
-    </div>
+      {# </div> #}
+    {# </div> #}
   {% endif %}
 <div class="pagination justify-content-center">
   <a href="#">&laquo;</a>
-  <a href="#"> 1 </a>
-  <a class="active" href="#"> 2 </a>
+  <a class="active" href="#"> 1 </a>
+  <a href="#"> 2 </a>
   <a href="#"> 3 </a>
   <a href="#"> 4 </a>
   <a href="#"> 5 </a>

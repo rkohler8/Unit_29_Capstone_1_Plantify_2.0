@@ -13,24 +13,6 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
-# class Follows(db.Model):
-#     """Connection of a follower <-> followed_user."""
-
-#     __tablename__ = 'follows'
-
-#     user_being_followed_id = db.Column(
-#         db.Integer,
-#         db.ForeignKey('users.id', ondelete="cascade"),
-#         primary_key=True,
-#     )
-
-#     user_following_id = db.Column(
-#         db.Integer,
-#         db.ForeignKey('users.id', ondelete="cascade"),
-#         primary_key=True,
-#     )
-
-
 class Favorites(db.Model):
     """Mapping user favorites to warbles."""
 
@@ -63,12 +45,6 @@ class User(db.Model):
         primary_key=True,
     )
 
-    # email = db.Column(
-    #     db.Text,
-    #     nullable=False,
-    #     unique=True,
-    # )
-
     username = db.Column(
         db.Text,
         nullable=False,
@@ -87,39 +63,9 @@ class User(db.Model):
 
     gardens = db.relationship('Garden')
 
-    # followers = db.relationship(
-    #     "User",
-    #     secondary="follows",
-    #     primaryjoin=(Follows.user_being_followed_id == id),
-    #     secondaryjoin=(Follows.user_following_id == id)
-    # )
-
-    # following = db.relationship(
-    #     "User",
-    #     secondary="follows",
-    #     primaryjoin=(Follows.user_following_id == id),
-    #     secondaryjoin=(Follows.user_being_followed_id == id)
-    # )
-
-    # likes = db.relationship(
-    #     'Message',
-    #     secondary="likes"
-    # )
-
     def __repr__(self):
         return f"<User #{self.id}: {self.username}>"
 
-    # def is_followed_by(self, other_user):
-    #     """Is this user followed by `other_user`?"""
-
-    #     found_user_list = [user for user in self.followers if user == other_user]
-    #     return len(found_user_list) == 1
-
-    # def is_following(self, other_user):
-    #     """Is this user following `other_use`?"""
-
-    #     found_user_list = [user for user in self.following if user == other_user]
-    #     return len(found_user_list) == 1
 
     @classmethod
     def signup(cls, username, password, image_url):
@@ -132,7 +78,6 @@ class User(db.Model):
 
         user = User(
             username=username,
-            # email=email,
             password=hashed_pwd,
             image_url=image_url,
         )
@@ -185,7 +130,6 @@ class Plant(db.Model):
         unique=True,
     )
 
-    # user = db.relationship('User')
 
 class Garden(db.Model):
     """A Garden group"""
@@ -204,7 +148,7 @@ class Garden(db.Model):
 
     description = db.Column(
         db.String(140),
-        nullable=False,
+        default=""
     )
 
     image_url = db.Column(
@@ -226,7 +170,6 @@ class Garden(db.Model):
 
     user = db.relationship('User')
     plants = db.relationship('Plant', secondary='gardens_plants', backref='gardens')
-    # gardens = db.relationship('Garden')
 
 
 class GardenPlant(db.Model):
@@ -249,10 +192,6 @@ class GardenPlant(db.Model):
        db.Integer, 
        db.ForeignKey('plants.api_id'),
        )
-#    plant_api_id = db.Column(
-#         db.Integer,
-#         primary_key=True,
-#     )
 
 
 def connect_db(app):

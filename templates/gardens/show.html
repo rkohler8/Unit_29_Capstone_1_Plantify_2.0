@@ -42,7 +42,7 @@
       <a href="/plants" class="btn btn-success">Add Plant</a>
       </li>
       <li class="stat">
-        <form method="POST" action="/gardens/delete" class="form-inline">
+        <form method="POST" action="/gardens/{{ garden.id }}\delete" class="form-inline">
           <button class="btn btn-danger ml-2">Delete Garden</button>
         </form>
       </li>

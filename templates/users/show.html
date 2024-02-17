@@ -2,15 +2,22 @@
 
 {% block user_details %}
 
-  {# <div class="row" style="margin-top: 100px;"> #}
-    <h3>Recent Gardens:</h3>
+  <div class="row">
+    <div class="col-sm-3">
+      <h3>Recent Gardens:</h3>
+    </div>
+    <div class="col-sm-2 align-items-left">
+      <a href="/gardens/new" class="btn btn-sm btn-primary">New Garden</a>
+    </div>
+  </div>
     <hr>
     {% for garden in user.gardens %}
-      <div class="col-sm-6 card ">
+      <div class="col-md-3 card ">
         <div class="card-body">
-          <div class="position-relative mb-3">
-            <img class="img-thumbnail" src="{{garden.image_url}}">
-            <a href="/gardens/{{ garden.id }}">{{ garden }}</a>
+          <div class="position-relative">
+            <img class="img-thumbnail" src="{{garden.image_url}}" style="max-width: 250px;">
+            <a href="/gardens/{{ garden.id }}">{{ garden.name }}</a>
+            <small><span class="text-muted">{{ garden.created_at.strftime('%d %B %Y') }}</span></small>
           </div>
         </div>
       </div>

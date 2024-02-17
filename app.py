@@ -182,6 +182,49 @@ def user_show(user_id):
    return render_template('users/show.html', user=user)
 
 
+@app.route('/users/edit', methods=["GET", "POST"])
+def profile():
+    """Update profile for current user."""
+
+    # IMPLEMENT THIS
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    form = UserEditForm(obj=g.user)
+    
+    if form.validate_on_submit():
+        if User.authenticate(g.user.username,
+                                 form.password.data):
+            g.user.username=form.username.data
+            g.user.image_url=form.image_url.data or "/static/images/default-pic.png"
+
+            db.session.commit()
+            return redirect(f"/users/{g.user.id}")
+
+
+        flash("Invalid credentials.", 'danger')
+        return redirect("/")
+
+    return render_template('users/edit.html', form=form)
+
+
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+
 ##############################################################################
 # Plant routes:
 
@@ -190,15 +233,8 @@ def user_show(user_id):
 def list_plants():
    """Page with listing of plants.
 
-   Can take a 'q' param in querystring to search by that username.
+   Can take a 'q' param in querystring to search by any Plant parameter.
    """
-
-   # search = request.args.get('q')
-
-   # if not search:
-   #     plants = Plant.query.all()
-   # else:
-   #     plants = User.query.filter(User.username.like(f"%{search}%")).all()
 
    search = request.args.get('q')
 
@@ -252,7 +288,6 @@ def plant_show(plant_id):
             flash(f"Plant already in garden '{garden.name}'", 'warning')
             return render_template('plants/show.html', plant=plant, plant_data=plant_data, form=form)
 
-      # if plant_id not in garden.plants.id:
       temp_plant = Plant.query.filter_by(api_id=plant['id']).all()
       if len(temp_plant) == 0:
          new_plant = Plant(id=plant_id,
@@ -304,7 +339,7 @@ def add_plant_to_garden(plant_id):
 def list_gardens():
    """Page with listing of gardens.
 
-   Can take a 'q' param in querystring to search by that gardenname.
+   Can take a 'q' param in querystring to search by that garden name.
    """
 
    search = request.args.get('q')
@@ -322,16 +357,7 @@ def garden_show(garden_id):
    """Show garden profile."""
 
    garden = Garden.query.get_or_404(garden_id)
-   # user = User.query.get_or_404(garden.user_id)
 
-   # snagging messages in order from the database;
-   # user.messages won't be in order by default
-   # gardens = (Garden
-   #             .query
-   #             .filter(Garden.user_id == user_id)
-   #             .order_by(Garden.created_at.desc())
-   #             .limit(100)
-   #             .all())
    plants=[]
    for plant in garden.plants:
       resp = requests.get(f"{BASE_URL}/plants/{plant.api_id}",
@@ -343,7 +369,33 @@ def garden_show(garden_id):
    return render_template('gardens/show.html', garden=garden, plants=plants)
 
 
-@app.route('/gardens/<int:garden_id>/edit')
+@app.route('/gardens/new', methods=["GET", "POST"])
+def garden_add():
+    """Add a garden:
+
+    Show form if GET. If valid, update message and redirect to user page.
+    """
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = GardenAddForm()
+
+    if form.validate_on_submit():
+        gar = Garden(name=form.name.data,
+                     user_id=g.user.id,
+                     description=form.description.data or None
+                     )
+        g.user.gardens.append(gar)
+        db.session.commit()
+
+        return redirect(f"/users/{g.user.id}")
+
+    return render_template('gardens/new.html', form=form)
+
+
+@app.route('/gardens/<int:garden_id>/edit', methods=["GET", "POST"])
 def garden_edit(garden_id):
    """Edit Garden Information"""
 
@@ -360,26 +412,39 @@ def garden_edit(garden_id):
    form = GardenAddForm()
 
    if form.validate_on_submit():
-      user = User.authenticate(form.username.data,
-                              form.password.data)
 
-      if user:
+      if g.user:
          try:
             garden.name = form.name.data
             db.session.commit()
             flash(f"Garden renamed to {garden.name}", "success")
-            return redirect("/gardens/<int:garden_id>")
+            return redirect(f'/gardens/{garden_id}')
          
          except IntegrityError:
             flash("Garden name already taken", 'warning')
-            return render_template('users/update.html', form=form)
+            return render_template('gardens/edit.html', form=form)
 
       flash("Invalid credentials.", 'danger')
 
-   return render_template('users/login.html', form=form)
+   return render_template('gardens/edit.html', form=form)
 
 
 ###### TODO: Delete Garden
+@app.route('/gardens/<int:garden_id>/delete', methods=["POST"])
+def garden_delete(garden_id):
+    """Delete a garden."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    gar = Garden.query.get(garden_id)
+    db.session.delete(gar)
+    db.session.commit()
+
+    flash(f"Garden '{gar.name}' Deleted", 'warning')
+
+    return redirect(f"/users/{g.user.id}")
 
 
 

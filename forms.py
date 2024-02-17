@@ -6,7 +6,8 @@ from wtforms.validators import DataRequired, Length
 class GardenAddForm(FlaskForm):
     """Form for adding/editing Gardens."""
 
-    name = TextAreaField('Enter Garden Name', validators=[DataRequired()])
+    name = StringField('Garden Name', validators=[DataRequired()])
+    description = StringField('Garden description')
 
 
 class PlantToGardenForm(FlaskForm):
@@ -34,8 +35,7 @@ class UserEditForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     image_url = StringField('(Optional) Image URL')
-    # bio = TextAreaField('Add Bio')
-    password = PasswordField('Password', validators=[Length(min=6)])
+    # password = PasswordField('Password', validators=[Length(min=6)])
 
 class SearchForm(FlaskForm):
     """Main plant search bar."""
